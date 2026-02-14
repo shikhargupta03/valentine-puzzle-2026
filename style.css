@@ -1,8 +1,19 @@
 body{
     font-family: Arial;
     text-align:center;
-    background:#ffe9ec;
+
+    /* Soft romantic gradient */
+    background: linear-gradient(
+        135deg,
+        #ffe9ec 0%,
+        #ffd6e0 40%,
+        #ffeef3 100%
+    );
+
+    min-height:100vh;
+    margin:0;
 }
+
 
 .container{
     display:flex;
@@ -10,7 +21,13 @@ body{
     gap:40px;
     flex-wrap:wrap;
     margin-top:30px;
+
+    background: rgba(255,255,255,0.35);
+    padding:20px;
+    border-radius:20px;
+    backdrop-filter: blur(6px);
 }
+
 
 #puzzle{
     position:relative;
