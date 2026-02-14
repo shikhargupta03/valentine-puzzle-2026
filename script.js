@@ -1,152 +1,109 @@
 const puzzle = document.getElementById("puzzle");
-const previewImage = document.getElementById("previewImage");
-const resolveSection = document.getElementById("resolveSection");
-const finalSurprise = document.getElementById("finalSurprise");
-const finalImage = document.getElementById("finalImage");
-
 const size = 3;
-
 let tiles = [];
-let emptyIndex;
+let emptyIndex = size * size - 1;
 
-const images = [
-    "images/img1.jpg",
-    "images/img2.jpg",
-    "images/img3.jpg",
-    "images/img4.jpg"
-];
-
-let selectedImage = "";
-
-function startGame() {
-
-    selectedImage = images[Math.floor(Math.random() * images.length)];
-
-    previewImage.src = selectedImage;
-
-    puzzle.style.gridTemplateColumns = `repeat(${size},1fr)`;
-    puzzle.style.gridTemplateRows = `repeat(${size},1fr)`;
-
-    createTiles();
-    shuffleTiles();
-    drawPuzzle();
-
-    resolveSection.classList.add("hidden");
-    finalSurprise.classList.add("hidden");
-}
-
-function createTiles() {
+function createPuzzle(){
 
     tiles = [];
 
-    for (let i = 0; i < size * size - 1; i++) {
+    for(let i=0;i<size*size;i++){
         tiles.push(i);
     }
 
-    tiles.push(null);
-    emptyIndex = tiles.length - 1;
+    shuffle(tiles);
+
+    render();
 }
 
-function shuffleTiles() {
-
-    for (let i = 0; i < 200; i++) {
-        let moves = getValidMoves(emptyIndex);
-        let move = moves[Math.floor(Math.random() * moves.length)];
-        swap(emptyIndex, move);
-        emptyIndex = move;
+function shuffle(arr){
+    for(let i=arr.length-1;i>0;i--){
+        let j = Math.floor(Math.random()*(i+1));
+        [arr[i],arr[j]] = [arr[j],arr[i]];
     }
 }
 
-function drawPuzzle() {
-
+function render(){
     puzzle.innerHTML = "";
 
-    tiles.forEach((tile, index) => {
+    tiles.forEach((value,index)=>{
 
-        const div = document.createElement("div");
-        div.classList.add("tile");
+        const tile = document.createElement("div");
 
-        if (tile === null) {
-            div.classList.add("empty");
+        if(value === size*size-1){
+            tile.classList.add("tile","empty");
+        } else {
+
+            tile.classList.add("tile");
+
+            let row = Math.floor(value/size);
+            let col = value % size;
+
+            tile.style.backgroundPosition =
+                `-${col*100}px -${row*100}px`;
+
+            tile.addEventListener("click",()=>{
+                moveTile(index);
+            });
         }
-        else {
 
-            let row = Math.floor(tile / size);
-            let col = tile % size;
-
-            div.style.backgroundImage = `url(${selectedImage})`;
-            div.style.backgroundSize = `${size * 100}% ${size * 100}%`;
-            div.style.backgroundPosition =
-                `${(col / (size - 1)) * 100}% ${(row / (size - 1)) * 100}%`;
-        }
-
-        div.addEventListener("click", () => moveTile(index));
-
-        puzzle.appendChild(div);
+        puzzle.appendChild(tile);
     });
 }
 
-function getValidMoves(index) {
+function moveTile(index){
 
-    let moves = [];
+    const neighbors = [
+        index-1,
+        index+1,
+        index-size,
+        index+size
+    ];
 
-    let row = Math.floor(index / size);
-    let col = index % size;
+    if(neighbors.includes(emptyIndex) &&
+       isAdjacent(index, emptyIndex)){
 
-    if (row > 0) moves.push(index - size);
-    if (row < size - 1) moves.push(index + size);
-    if (col > 0) moves.push(index - 1);
-    if (col < size - 1) moves.push(index + 1);
+        [tiles[index], tiles[emptyIndex]] =
+        [tiles[emptyIndex], tiles[index]];
 
-    return moves;
-}
-
-function moveTile(index) {
-
-    if (getValidMoves(emptyIndex).includes(index)) {
-
-        swap(emptyIndex, index);
         emptyIndex = index;
-        drawPuzzle();
+
+        render();
         checkWin();
     }
 }
 
-function swap(a, b) {
-    [tiles[a], tiles[b]] = [tiles[b], tiles[a]];
+function isAdjacent(i,j){
+
+    const row1 = Math.floor(i/size);
+    const col1 = i%size;
+
+    const row2 = Math.floor(j/size);
+    const col2 = j%size;
+
+    return Math.abs(row1-row2)+Math.abs(col1-col2) === 1;
 }
 
-function checkWin() {
+function checkWin(){
 
-    for (let i = 0; i < tiles.length - 1; i++) {
-        if (tiles[i] !== i) return;
+    for(let i=0;i<tiles.length;i++){
+        if(tiles[i] !== i) return;
     }
 
-    resolveSection.classList.remove("hidden");
-    createHearts();
+    showMessage();
 }
 
-function showFinalSurprise() {
+function solvePuzzle(){
 
-    finalImage.src = selectedImage;
-    finalSurprise.classList.remove("hidden");
+    tiles = [...Array(size*size).keys()];
+    emptyIndex = size*size-1;
+    render();
+    showMessage();
 }
 
-function createHearts() {
-
-    for (let i = 0; i < 25; i++) {
-
-        let heart = document.createElement("div");
-        heart.innerHTML = "💖";
-
-        heart.style.position = "fixed";
-        heart.style.left = Math.random() * 100 + "vw";
-        heart.style.top = "-20px";
-        heart.style.fontSize = "24px";
-        heart.style.animation = "fall 3s linear";
-
-        document.body.appendChild(heart);
-
-        setTimeout(() => heart.remove(), 3000);
-    }
+function showMessage(){
+    document.getElementById("message")
+        .classList.remove("hidden");
 }
+
+createPuzzle();
