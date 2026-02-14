@@ -1,236 +1,201 @@
-const size = 3;
-const puzzle = document.getElementById("puzzle");
-const reference = document.getElementById("reference");
-const loveText = document.getElementById("loveText");
+const board = document.getElementById("puzzle-board");
+const preview = document.getElementById("preview-img");
+const message = document.getElementById("message");
+
+const GRID_SIZE = 3;
+const TOTAL_TILES = GRID_SIZE * GRID_SIZE;
 
 let tiles = [];
-let emptyPos = { row: 2, col: 2 };
+let tileOrder = [];
+let blankIndex = TOTAL_TILES - 1;
+let currentImage = "";
 
-const tileSize = () => window.innerWidth < 600 ? 90 : 110;
+/* -------- Load Random Image -------- */
+function loadRandomImage() {
+  const imgNumber = Math.floor(Math.random() * 10) + 1;
+  currentImage = `images/img${imgNumber}.jpg`;
 
-/* IMAGE LIST */
-const photos = [];
-for (let i = 1; i <= 10; i++) {
-    photos.push(`images/img${i}.jpg`);
+  preview.src = currentImage;
+
+  const img = new Image();
+  img.src = currentImage;
+  img.onload = () => createPuzzle(img);
 }
 
-/* RANDOM IMAGE */
-const selectedPhoto =
-    photos[Math.floor(Math.random() * photos.length)];
+/* -------- Create Puzzle -------- */
+function createPuzzle(img) {
+  board.innerHTML = "";
+  tiles = [];
+  tileOrder = [];
 
-reference.src = selectedPhoto;
+  const pieceWidth = img.width / GRID_SIZE;
+  const pieceHeight = img.height / GRID_SIZE;
 
-/* LOVE MESSAGES */
-const messages = [
-    "You are my favorite notification ❤️",
-    "Every puzzle piece leads me back to you 💕",
-    "Life is beautiful because you are in it 💖",
-    "You complete me in every possible way 🧩",
-    "With you, every moment feels magical ✨",
-    "My heart chooses you everyday ❤️",
-    "You are my today and all of my tomorrows 💞",
-    "Our love story is my favorite adventure 💘",
-    "You are my happy place 🥰",
-    "Forever is not enough with you ❤️"
+  // Create pieces using canvas
+  for (let i = 0; i < TOTAL_TILES; i++) {
+
+    if (i === TOTAL_TILES - 1) {
+      tiles.push(null);
+      tileOrder.push(i);
+      continue;
+    }
+
+    const canvas = document.createElement("canvas");
+    canvas.width = 100;
+    canvas.height = 100;
+    const ctx = canvas.getContext("2d");
+
+    const sx = (i % GRID_SIZE) * pieceWidth;
+    const sy = Math.floor(i / GRID_SIZE) * pieceHeight;
+
+    ctx.drawImage(
+      img,
+      sx, sy,
+      pieceWidth, pieceHeight,
+      0, 0,
+      canvas.width, canvas.height
+    );
+
+    canvas.classList.add("tile");
+    canvas.dataset.index = i;
+
+    canvas.addEventListener("click", () => moveTile(i));
+
+    tiles.push(canvas);
+    tileOrder.push(i);
+  }
+
+  shufflePuzzle();
+  renderBoard();
+}
+
+/* -------- Shuffle -------- */
+function shufflePuzzle() {
+
+  do {
+    tileOrder.sort(() => Math.random() - 0.5);
+  } while (isSolved(tileOrder));
+
+  blankIndex = tileOrder.indexOf(TOTAL_TILES - 1);
+}
+
+/* -------- Render -------- */
+function renderBoard() {
+  board.innerHTML = "";
+
+  tileOrder.forEach((value, idx) => {
+
+    if (value === TOTAL_TILES - 1) {
+      const blank = document.createElement("div");
+      blank.classList.add("tile", "blank");
+      board.appendChild(blank);
+    } else {
+      board.appendChild(tiles[value]);
+    }
+
+  });
+}
+
+/* -------- Move Tile -------- */
+function moveTile(tileOriginalIndex) {
+
+  const tileCurrentIndex = tileOrder.indexOf(tileOriginalIndex);
+
+  if (isAdjacent(tileCurrentIndex, blankIndex)) {
+
+    [tileOrder[tileCurrentIndex], tileOrder[blankIndex]] =
+      [tileOrder[blankIndex], tileOrder[tileCurrentIndex]];
+
+    blankIndex = tileCurrentIndex;
+
+    renderBoard();
+
+    if (isSolved(tileOrder)) {
+      showLoveMessage();
+      launchConfetti();
+      launchHearts();
+    }
+  }
+}
+
+/* -------- Adjacency -------- */
+function isAdjacent(i, j) {
+
+  const rowI = Math.floor(i / GRID_SIZE);
+  const colI = i % GRID_SIZE;
+
+  const rowJ = Math.floor(j / GRID_SIZE);
+  const colJ = j % GRID_SIZE;
+
+  return (
+    (rowI === rowJ && Math.abs(colI - colJ) === 1) ||
+    (colI === colJ && Math.abs(rowI - rowJ) === 1)
+  );
+}
+
+/* -------- Solved Check -------- */
+function isSolved(order) {
+  return order.every((val, idx) => val === idx);
+}
+
+/* -------- Love Messages -------- */
+const loveMessages = [
+  "Happy Valentine's Day ❤️ You complete my puzzle of life.",
+  "Every piece led me to you 💕",
+  "You make my world whole 🧩❤️",
+  "Solving this puzzle was easy… loving you is easier 💖",
+  "You are my forever favorite picture 📸❤️"
 ];
 
-/* LOAD IMAGE */
-const image = new Image();
-image.src = selectedPhoto;
-image.onload = createPuzzle;
-
-
-/* ========================= */
-/* CREATE PUZZLE */
-/* ========================= */
-function createPuzzle() {
-
-    puzzle.innerHTML = "";
-    tiles = [];
-
-    let count = 0;
-
-    for (let r = 0; r < size; r++) {
-        for (let c = 0; c < size; c++) {
-
-            if (r === size - 1 && c === size - 1) continue;
-
-            const tile = document.createElement("div");
-            tile.className = "tile";
-
-            tile.dataset.value = count;
-
-            /* Image slicing */
-            const imgRow = Math.floor(count / size);
-            const imgCol = count % size;
-
-            tile.style.backgroundImage = `url('${selectedPhoto}')`;
-            tile.style.backgroundPosition =
-                `-${imgCol * tileSize()}px -${imgRow * tileSize()}px`;
-
-            puzzle.appendChild(tile);
-            tiles.push(tile);
-
-            count++;
-        }
-    }
-
-    /* Place tiles in solved position */
-    let index = 0;
-    for (let r = 0; r < size; r++) {
-        for (let c = 0; c < size; c++) {
-
-            if (r === size - 1 && c === size - 1) continue;
-
-            positionTile(tiles[index], r, c);
-            index++;
-        }
-    }
-
-    emptyPos = { row: size - 1, col: size - 1 };
-
-    /* Proper shuffle using valid moves */
-    shuffleMoves(80);
-
-    /* Attach click handlers */
-    tiles.forEach(tile => {
-        tile.onclick = () => moveTile(tile);
-    });
-}
-
-
-/* ========================= */
-/* POSITION TILE */
-/* ========================= */
-function positionTile(tile, row, col) {
-
-    tile.style.top = row * tileSize() + "px";
-    tile.style.left = col * tileSize() + "px";
-
-    tile.dataset.row = row;
-    tile.dataset.col = col;
-}
-
-
-/* ========================= */
-/* MOVE TILE */
-/* ========================= */
-function moveTile(tile) {
-
-    const row = parseInt(tile.dataset.row);
-    const col = parseInt(tile.dataset.col);
-
-    if (isAdjacent(row, col, emptyPos.row, emptyPos.col)) {
-
-        positionTile(tile, emptyPos.row, emptyPos.col);
-        emptyPos = { row, col };
-
-        checkWin();
-    }
-}
-
-
-/* ========================= */
-/* ADJACENCY CHECK */
-/* ========================= */
-function isAdjacent(r1, c1, r2, c2) {
-    return Math.abs(r1 - r2) + Math.abs(c1 - c2) === 1;
-}
-
-
-/* ========================= */
-/* SOLVABLE SHUFFLE */
-/* ========================= */
-function shuffleMoves(moves) {
-
-    for (let i = 0; i < moves; i++) {
-
-        const neighbors = tiles.filter(tile => {
-
-            const r = parseInt(tile.dataset.row);
-            const c = parseInt(tile.dataset.col);
-
-            return isAdjacent(r, c, emptyPos.row, emptyPos.col);
-        });
-
-        const randomTile =
-            neighbors[Math.floor(Math.random() * neighbors.length)];
-
-        const r = parseInt(randomTile.dataset.row);
-        const c = parseInt(randomTile.dataset.col);
-
-        positionTile(randomTile, emptyPos.row, emptyPos.col);
-        emptyPos = { row: r, col: c };
-    }
-}
-
-
-/* ========================= */
-/* CHECK WIN */
-/* ========================= */
-function checkWin() {
-
-    for (let tile of tiles) {
-
-        const val = parseInt(tile.dataset.value);
-        const correctRow = Math.floor(val / size);
-        const correctCol = val % size;
-
-        if (
-            parseInt(tile.dataset.row) !== correctRow ||
-            parseInt(tile.dataset.col) !== correctCol
-        ) return;
-    }
-
-    showLoveMessage();
-}
-
-
-/* ========================= */
-/* AUTO SOLVE */
-/* ========================= */
-function solvePuzzle() {
-
-    for (let tile of tiles) {
-
-        const val = parseInt(tile.dataset.value);
-        const row = Math.floor(val / size);
-        const col = val % size;
-
-        positionTile(tile, row, col);
-    }
-
-    emptyPos = { row: 2, col: 2 };
-    showLoveMessage();
-}
-
-
-/* ========================= */
-/* SHOW LOVE MESSAGE */
-/* ========================= */
 function showLoveMessage() {
+  const randomMsg =
+    loveMessages[Math.floor(Math.random() * loveMessages.length)];
 
-    loveText.innerText =
-        messages[Math.floor(Math.random() * messages.length)];
-
-    const msg = document.getElementById("message");
-    msg.classList.remove("hidden");
-
-    msg.scrollIntoView({ behavior: "smooth" });
+  message.innerText = randomMsg;
+  message.style.display = "block";
 }
 
-
-/* ========================= */
-/* WHATSAPP SHARE */
-/* ========================= */
+/* -------- WhatsApp Share -------- */
 function shareWhatsApp() {
+  const text = encodeURIComponent(
+    "I solved this Valentine Puzzle ❤️"
+  );
 
-    const text = encodeURIComponent(
-        "I solved our love puzzle ❤️🧩"
-    );
-
-    window.open(
-        `https://api.whatsapp.com/send?text=${text}`,
-        "_blank"
-    );
+  window.open(`https://wa.me/?text=${text}`);
 }
+
+/* -------- Confetti -------- */
+function launchConfetti() {
+
+  for (let i = 0; i < 120; i++) {
+    const conf = document.createElement("div");
+    conf.className = "confetti";
+    conf.style.left = Math.random() * 100 + "vw";
+    conf.style.animationDuration = Math.random() * 2 + 3 + "s";
+
+    document.body.appendChild(conf);
+
+    setTimeout(() => conf.remove(), 5000);
+  }
+}
+
+/* -------- Floating Hearts -------- */
+function launchHearts() {
+
+  for (let i = 0; i < 25; i++) {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤️";
+
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = Math.random() * 20 + 20 + "px";
+    heart.style.animationDuration = Math.random() * 3 + 4 + "s";
+
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 6000);
+  }
+}
+
+/* -------- Start -------- */
+loadRandomImage();
