@@ -37,6 +37,7 @@ function startGame() {
 }
 
 function createTiles() {
+
     tiles = [];
 
     for (let i = 0; i < size * size - 1; i++) {
@@ -68,14 +69,19 @@ function drawPuzzle() {
 
         if (tile === null) {
             div.classList.add("empty");
-        } else {
+        } 
+        else {
 
-            let x = tile % size;
-            let y = Math.floor(tile / size);
+            let row = Math.floor(tile / size);
+            let col = tile % size;
 
             div.style.backgroundImage = `url(${selectedImage})`;
+
+            // ⭐ FIXED IMAGE SLICING
+            div.style.backgroundSize = `${size * 100}% ${size * 100}%`;
+
             div.style.backgroundPosition =
-                `${(x/(size-1))*100}% ${(y/(size-1))*100}%`;
+                `${(col * 100) / (size - 1)}% ${(row * 100) / (size - 1)}%`;
         }
 
         div.addEventListener("click", () => moveTile(index));
