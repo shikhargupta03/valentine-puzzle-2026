@@ -13,13 +13,13 @@ body{
 }
 
 #puzzle{
-    display:grid;
-    grid-template-columns:repeat(3,110px);
-    grid-template-rows:repeat(3,110px);
-    gap:6px;
+    position:relative;
+    width:330px;
+    height:330px;
 }
 
 .tile{
+    position:absolute;
     width:110px;
     height:110px;
     border-radius:10px;
@@ -27,12 +27,7 @@ body{
     background-repeat:no-repeat;
     background-size:330px 330px;
 
-    transition:all 0.3s ease;   /* SMOOTH SLIDE */
-}
-
-.empty{
-    background:none;
-    cursor:default;
+    transition:all 0.35s ease; /* REAL SLIDING */
 }
 
 .side{
@@ -69,22 +64,18 @@ button{
     color:#d6336c;
     font-size:24px;
 }
-/* Mobile responsiveness */
+
+/* Mobile */
 @media (max-width:600px){
 
     #puzzle{
-        grid-template-columns:repeat(3,90px);
-        grid-template-rows:repeat(3,90px);
+        width:270px;
+        height:270px;
     }
 
     .tile{
         width:90px;
         height:90px;
         background-size:270px 270px;
-    }
-
-    #reference{
-        width:160px;
-        height:160px;
     }
 }
