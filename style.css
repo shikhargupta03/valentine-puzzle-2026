@@ -1,84 +1,64 @@
-body{
-    font-family: Arial;
-    text-align:center;
-    background:#ffe9ec;
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background: #ffe6f0;
+  margin: 0;
 }
 
-.container{
-    display:flex;
-    justify-content:center;
-    gap:40px;
-    flex-wrap:wrap;
-    margin-top:30px;
+h1 {
+  margin-top: 15px;
 }
 
-#puzzle{
-    position:relative;
-    width:330px;
-    height:330px;
+.container {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
 }
 
-.tile{
-    position:absolute;
-    width:110px;
-    height:110px;
-    border-radius:10px;
-    cursor:pointer;
-    background-repeat:no-repeat;
-    background-size:330px 330px;
-
-    transition:all 0.35s ease; /* REAL SLIDING */
+#preview-img {
+  width: 220px;
+  border-radius: 10px;
 }
 
-.side{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
+#puzzle-board {
+  width: 300px;
+  height: 300px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 3px;
+  margin: 15px auto;
 }
 
-#reference{
-    width:200px;
-    height:200px;
-    object-fit:cover;
-    border-radius:10px;
-    margin-bottom:15px;
+.tile {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
 }
 
-button{
-    padding:12px 22px;
-    border:none;
-    border-radius:10px;
-    background:#ff4d6d;
-    color:white;
-    font-size:16px;
-    cursor:pointer;
-    margin-top:10px;
+.blank {
+  background: transparent;
+  cursor: default;
 }
 
-.hidden{
-    display:none;
+#message {
+  display: none;
+  color: #ff1493;
+  margin-top: 10px;
 }
 
-#message{
-    margin-top:40px;
-    color:#d6336c;
-    font-size:24px;
+.share-btn {
+  padding: 10px 20px;
+  margin-top: 10px;
+  background: #ff1493;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
-/* Mobile */
-@media (max-width:600px){
-
-    #puzzle{
-        width:270px;
-        height:270px;
-    }
-
-    .tile{
-        width:90px;
-        height:90px;
-        background-size:270px 270px;
-    }
-}
+/* Confetti */
 .confetti {
   position: fixed;
   width: 8px;
@@ -94,6 +74,7 @@ button{
   }
 }
 
+/* Floating Hearts */
 .heart {
   position: fixed;
   bottom: -20px;
