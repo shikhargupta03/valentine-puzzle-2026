@@ -6,7 +6,9 @@ const loveText = document.getElementById("loveText");
 let tiles = [];
 let emptyPos = { row: 2, col: 2 };
 
-const tileSize = () => window.innerWidth < 600 ? 90 : 110;
+function tileSize() {
+    return window.innerWidth < 600 ? 90 : 110;
+}
 
 /* IMAGE LIST */
 const photos = [];
@@ -15,7 +17,7 @@ for (let i = 1; i <= 10; i++) {
 }
 
 /* RANDOM IMAGE */
-const selectedPhoto =
+let selectedPhoto =
     photos[Math.floor(Math.random() * photos.length)];
 
 reference.src = selectedPhoto;
@@ -34,11 +36,13 @@ const messages = [
     "Forever is not enough with you ❤️"
 ];
 
-/* LOAD IMAGE */
+/* LOAD IMAGE FIRST */
 const image = new Image();
 image.src = selectedPhoto;
-image.onload = createPuzzle;
 
+image.onload = () => {
+    createPuzzle();
+};
 
 /* ========================= */
 /* CREATE PUZZLE */
@@ -60,11 +64,14 @@ function createPuzzle() {
 
             tile.dataset.value = count;
 
-            /* Image slicing */
             const imgRow = Math.floor(count / size);
             const imgCol = count % size;
 
             tile.style.backgroundImage = `url('${selectedPhoto}')`;
+
+            tile.style.backgroundSize =
+                `${tileSize() * size}px ${tileSize() * size}px`;
+
             tile.style.backgroundPosition =
                 `-${imgCol * tileSize()}px -${imgRow * tileSize()}px`;
 
@@ -75,7 +82,7 @@ function createPuzzle() {
         }
     }
 
-    /* Place tiles in solved position */
+    /* Place tiles solved */
     let index = 0;
     for (let r = 0; r < size; r++) {
         for (let c = 0; c < size; c++) {
@@ -89,18 +96,13 @@ function createPuzzle() {
 
     emptyPos = { row: size - 1, col: size - 1 };
 
-    /* Proper shuffle using valid moves */
     shuffleMoves(80);
 
-    /* Attach click handlers */
     tiles.forEach(tile => {
         tile.onclick = () => moveTile(tile);
     });
 }
 
-
-/* ========================= */
-/* POSITION TILE */
 /* ========================= */
 function positionTile(tile, row, col) {
 
@@ -111,9 +113,6 @@ function positionTile(tile, row, col) {
     tile.dataset.col = col;
 }
 
-
-/* ========================= */
-/* MOVE TILE */
 /* ========================= */
 function moveTile(tile) {
 
@@ -129,17 +128,11 @@ function moveTile(tile) {
     }
 }
 
-
-/* ========================= */
-/* ADJACENCY CHECK */
 /* ========================= */
 function isAdjacent(r1, c1, r2, c2) {
     return Math.abs(r1 - r2) + Math.abs(c1 - c2) === 1;
 }
 
-
-/* ========================= */
-/* SOLVABLE SHUFFLE */
 /* ========================= */
 function shuffleMoves(moves) {
 
@@ -164,9 +157,6 @@ function shuffleMoves(moves) {
     }
 }
 
-
-/* ========================= */
-/* CHECK WIN */
 /* ========================= */
 function checkWin() {
 
@@ -185,9 +175,6 @@ function checkWin() {
     showLoveMessage();
 }
 
-
-/* ========================= */
-/* AUTO SOLVE */
 /* ========================= */
 function solvePuzzle() {
 
@@ -204,9 +191,6 @@ function solvePuzzle() {
     showLoveMessage();
 }
 
-
-/* ========================= */
-/* SHOW LOVE MESSAGE */
 /* ========================= */
 function showLoveMessage() {
 
@@ -219,9 +203,6 @@ function showLoveMessage() {
     msg.scrollIntoView({ behavior: "smooth" });
 }
 
-
-/* ========================= */
-/* WHATSAPP SHARE */
 /* ========================= */
 function shareWhatsApp() {
 
@@ -234,3 +215,10 @@ function shareWhatsApp() {
         "_blank"
     );
 }
+
+/* ========================= */
+/* REBUILD ON SCREEN RESIZE */
+/* ========================= */
+window.addEventListener("resize", () => {
+    createPuzzle();
+});
