@@ -12,7 +12,7 @@ for (let i = 1; i <= 10; i++) {
     photos.push(`images/img${i}.jpg`);
 }
 
-/* CUTE LOVE MESSAGES */
+/* LOVE MESSAGES */
 const messages = [
     "You are my favorite notification ❤️",
     "Every puzzle piece leads me back to you 💕",
@@ -55,6 +55,8 @@ function render() {
 
     puzzle.innerHTML = "";
 
+    const tileSize = window.innerWidth < 600 ? 90 : 110;
+
     tiles.forEach((value, index) => {
 
         const tile = document.createElement("div");
@@ -71,7 +73,7 @@ function render() {
             const col = value % size;
 
             tile.style.backgroundPosition =
-                `-${col * 110}px -${row * 110}px`;
+                `-${col * tileSize}px -${row * tileSize}px`;
 
             tile.onclick = () => moveTile(index);
         }
@@ -138,11 +140,14 @@ function showLoveMessage() {
 
     loveText.innerText = randomMessage;
 
-    document.getElementById("message")
-        .classList.remove("hidden");
+    const msgDiv = document.getElementById("message");
+    msgDiv.classList.remove("hidden");
+
+    /* AUTO SCROLL MOBILE FIX */
+    msgDiv.scrollIntoView({ behavior: "smooth" });
 }
 
-/* WHATSAPP SHARE */
+/* WHATSAPP SHARE MOBILE SAFE */
 function shareWhatsApp() {
 
     const text = encodeURIComponent(
@@ -150,7 +155,7 @@ function shareWhatsApp() {
     );
 
     window.open(
-        `https://wa.me/?text=${text}`,
+        `https://api.whatsapp.com/send?text=${text}`,
         "_blank"
     );
 }

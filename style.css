@@ -69,3 +69,22 @@ button{
     color:#d6336c;
     font-size:24px;
 }
+/* Mobile responsiveness */
+@media (max-width:600px){
+
+    #puzzle{
+        grid-template-columns:repeat(3,90px);
+        grid-template-rows:repeat(3,90px);
+    }
+
+    .tile{
+        width:90px;
+        height:90px;
+        background-size:270px 270px;
+    }
+
+    #reference{
+        width:160px;
+        height:160px;
+    }
+}
