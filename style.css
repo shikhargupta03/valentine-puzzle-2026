@@ -5,57 +5,52 @@ body {
   margin: 0;
 }
 
-h1 {
-  margin-top: 15px;
-}
-
-.container {
+.wrapper {
   display: flex;
   justify-content: center;
   gap: 40px;
   flex-wrap: wrap;
+  margin-top: 20px;
 }
 
-#preview-img {
+/* Preview */
+.preview-box img {
   width: 220px;
-  border-radius: 10px;
+  border-radius: 12px;
 }
 
+/* Puzzle Board */
 #puzzle-board {
   width: 300px;
   height: 300px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
-  gap: 3px;
-  margin: 15px auto;
+  border: 3px solid white;
 }
 
 .tile {
   width: 100%;
   height: 100%;
-  cursor: pointer;
 }
 
 .blank {
   background: transparent;
-  cursor: default;
+}
+
+button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  border: none;
+  background: hotpink;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
 #message {
   display: none;
-  color: #ff1493;
-  margin-top: 10px;
-}
-
-.share-btn {
-  padding: 10px 20px;
-  margin-top: 10px;
-  background: #ff1493;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+  color: deeppink;
 }
 
 /* Confetti */
@@ -74,7 +69,7 @@ h1 {
   }
 }
 
-/* Floating Hearts */
+/* Hearts */
 .heart {
   position: fixed;
   bottom: -20px;

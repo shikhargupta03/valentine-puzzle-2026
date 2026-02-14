@@ -15,10 +15,10 @@ function loadRandomImage() {
   const num = Math.floor(Math.random() * 10) + 1;
   const path = `images/img${num}.jpg`;
 
+  preview.src = path;
+
   const img = new Image();
   img.src = path;
-
-  preview.src = path;
 
   img.onload = () => createPuzzle(img);
 }
@@ -53,7 +53,7 @@ function createPuzzle(img) {
     ctx.drawImage(img, sx, sy, pieceW, pieceH, 0, 0, 100, 100);
 
     canvas.classList.add("tile");
-    canvas.addEventListener("click", () => moveTile(i));
+    canvas.onclick = () => moveTile(i);
 
     tiles.push(canvas);
     order.push(i);
@@ -78,24 +78,20 @@ function render() {
 
   board.innerHTML = "";
 
-  order.forEach(v => {
+  order.forEach(val => {
 
-    if (v === TOTAL - 1) {
-
+    if (val === TOTAL - 1) {
       const blank = document.createElement("div");
       blank.classList.add("tile", "blank");
       board.appendChild(blank);
-
     } else {
-
-      board.appendChild(tiles[v]);
-
+      board.appendChild(tiles[val]);
     }
 
   });
 }
 
-/* Move Tile */
+/* Move */
 function moveTile(originalIndex) {
 
   const tileIndex = order.indexOf(originalIndex);
@@ -110,12 +106,12 @@ function moveTile(originalIndex) {
     render();
 
     if (isSolved()) {
-      solvedEffects();
+      showLove();
     }
   }
 }
 
-/* Adjacent Check */
+/* Adjacent */
 function isAdjacent(i, j) {
 
   const r1 = Math.floor(i / GRID);
@@ -130,25 +126,27 @@ function isAdjacent(i, j) {
   );
 }
 
-/* Solved Check */
+/* Solved */
 function isSolved() {
   return order.every((v, i) => v === i);
 }
 
-/* Messages */
-const msgs = [
-  "Happy Valentine's Day ❤️ You complete me.",
-  "Every puzzle piece leads to you 💕",
-  "You are my forever favorite ❤️",
-  "My heart feels complete with you 💖",
-  "You are the best part of my life 💘"
-];
+/* Message + Effects */
+function showLove() {
 
-function solvedEffects() {
+  const msgs = [
+    "Every piece leads to you 💖",
+    "Forever yours ❤️",
+    "My heart belongs to you 💘",
+	"Happy Valentine's Day ❤️ You complete me.",
+    "You are my forever favorite ❤️",
+    "My heart feels complete with you 💖",
+    "You are the best part of my life 💘"
+  ];
 
-  const text = msgs[Math.floor(Math.random() * msgs.length)];
+  message.innerText =
+    msgs[Math.floor(Math.random() * msgs.length)];
 
-  message.innerText = text;
   message.style.display = "block";
 
   confetti();
@@ -159,13 +157,10 @@ function solvedEffects() {
 function confetti() {
 
   for (let i = 0; i < 120; i++) {
-
     const c = document.createElement("div");
     c.className = "confetti";
     c.style.left = Math.random() * 100 + "vw";
-
     document.body.appendChild(c);
-
     setTimeout(() => c.remove(), 5000);
   }
 }
@@ -174,26 +169,18 @@ function confetti() {
 function hearts() {
 
   for (let i = 0; i < 25; i++) {
-
     const h = document.createElement("div");
     h.className = "heart";
     h.innerHTML = "❤️";
     h.style.left = Math.random() * 100 + "vw";
-
     document.body.appendChild(h);
-
     setTimeout(() => h.remove(), 6000);
   }
 }
 
-/* WhatsApp Share */
+/* WhatsApp */
 function shareWhatsApp() {
-
-  const text = encodeURIComponent(
-    "I solved this beautiful love puzzle ❤️"
-  );
-
-  window.open(`https://wa.me/?text=${text}`);
+  window.open("https://wa.me/?text=I solved this love puzzle ❤️");
 }
 
 loadRandomImage();
