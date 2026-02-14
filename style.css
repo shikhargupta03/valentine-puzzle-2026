@@ -1,5 +1,5 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: Arial;
   text-align: center;
   background: #ffe6f0;
   margin: 0;
@@ -13,13 +13,11 @@ body {
   margin-top: 20px;
 }
 
-/* Preview Image */
 .preview-box img {
-  width: 250px;
+  width: 220px;
   border-radius: 10px;
 }
 
-/* Puzzle Board FIXED SIZE */
 #puzzle-board {
   width: 300px;
   height: 300px;
@@ -30,11 +28,9 @@ body {
   margin: auto;
 }
 
-/* Tile FIX */
 .tile {
   width: 100px;
   height: 100px;
-  box-sizing: border-box;
 }
 
 .blank {
@@ -72,7 +68,6 @@ button {
   }
 }
 
-/* Hearts */
 .heart {
   position: fixed;
   bottom: -20px;
