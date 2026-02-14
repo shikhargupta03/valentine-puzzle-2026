@@ -1,82 +1,81 @@
-body {
-  font-family: Arial;
-  text-align: center;
-  background: #ffe6f0;
-  margin: 0;
+body{
+    font-family: Arial;
+    text-align:center;
+    background:#ffe9ec;
 }
 
-.wrapper {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  flex-wrap: wrap;
-  margin-top: 20px;
+.container{
+    display:flex;
+    justify-content:center;
+    gap:40px;
+    flex-wrap:wrap;
+    margin-top:30px;
 }
 
-.preview-box img {
-  width: 220px;
-  border-radius: 10px;
+#puzzle{
+    position:relative;
+    width:330px;
+    height:330px;
 }
 
-#puzzle-board {
-  width: 300px;
-  height: 300px;
-  display: grid;
-  grid-template-columns: repeat(3, 100px);
-  grid-template-rows: repeat(3, 100px);
-  border: 3px solid white;
-  margin: auto;
+.tile{
+    position:absolute;
+    width:110px;
+    height:110px;
+    border-radius:10px;
+    cursor:pointer;
+    background-repeat:no-repeat;
+    background-size:330px 330px;
+
+    transition:all 0.35s ease; /* REAL SLIDING */
 }
 
-.tile {
-  width: 100px;
-  height: 100px;
+.side{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
 }
 
-.blank {
-  background: transparent;
+#reference{
+    width:200px;
+    height:200px;
+    object-fit:cover;
+    border-radius:10px;
+    margin-bottom:15px;
 }
 
-button {
-  margin-top: 10px;
-  padding: 10px 20px;
-  border: none;
-  background: hotpink;
-  color: white;
-  border-radius: 8px;
-  cursor: pointer;
+button{
+    padding:12px 22px;
+    border:none;
+    border-radius:10px;
+    background:#ff4d6d;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    margin-top:10px;
 }
 
-#message {
-  display: none;
-  color: deeppink;
+.hidden{
+    display:none;
 }
 
-/* Confetti */
-.confetti {
-  position: fixed;
-  width: 8px;
-  height: 8px;
-  background: red;
-  top: -10px;
-  animation: fall linear forwards;
+#message{
+    margin-top:40px;
+    color:#d6336c;
+    font-size:24px;
 }
 
-@keyframes fall {
-  to {
-    transform: translateY(110vh) rotate(360deg);
-  }
-}
+/* Mobile */
+@media (max-width:600px){
 
-.heart {
-  position: fixed;
-  bottom: -20px;
-  animation: floatUp ease-out forwards;
-}
+    #puzzle{
+        width:270px;
+        height:270px;
+    }
 
-@keyframes floatUp {
-  to {
-    transform: translateY(-110vh);
-    opacity: 0;
-  }
+    .tile{
+        width:90px;
+        height:90px;
+        background-size:270px 270px;
+    }
 }

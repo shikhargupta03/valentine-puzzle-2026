@@ -1,32 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Love Puzzle ❤️</title>
-<link rel="stylesheet" href="styles.css"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine Puzzle ❤️</title>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<h1>❤️ Solve My Love Puzzle ❤️</h1>
+<h1>💖 Solve Our Puzzle 💖</h1>
 
-<div class="wrapper">
+<div class="container">
 
-  <div class="preview-box">
-    <h3>Reference</h3>
-    <img id="preview-img">
-  </div>
+    <div id="puzzle"></div>
 
-  <div class="game-box">
-    <div id="puzzle-board"></div>
-    <h2 id="message"></h2>
-    <button onclick="shareWhatsApp()">Share on WhatsApp 💕</button>
-  </div>
+    <div class="side">
+        <h3>Reference</h3>
+        <img id="reference">
+
+        <button onclick="solvePuzzle()">Resolve Puzzle</button>
+    </div>
 
 </div>
 
-<script src="script.js"></script>
+<div id="message" class="hidden">
+    <h2 id="loveText"></h2>
 
+    <button id="shareBtn" onclick="shareWhatsApp()">
+        Share On WhatsApp 💚
+    </button>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
