@@ -7,15 +7,14 @@ body {
 .game-container {
     display: flex;
     justify-content: center;
-    align-items: start;
     gap: 20px;
     flex-wrap: wrap;
 }
 
 #puzzle {
     display: grid;
-    width: min(80vw, 420px);
-    height: min(80vw, 420px);
+    width: min(85vw, 420px);
+    height: min(85vw, 420px);
     border: 3px solid white;
 }
 
@@ -31,7 +30,7 @@ body {
 
 .tile {
     border: 1px solid white;
-    transition: all 0.3s ease;
+    transition: 0.3s;
 }
 
 .empty {

@@ -3,8 +3,7 @@ const previewImage = document.getElementById("previewImage");
 const message = document.getElementById("message");
 const countdownDiv = document.getElementById("countdown");
 
-let rows = 8;
-let cols = 8;
+let size = 4;
 let tiles = [];
 let emptyIndex;
 
@@ -25,22 +24,19 @@ let selectedImage = "";
 
 function startGame() {
 
-    let difficulty = document.getElementById("difficulty").value;
-
-    let parts = difficulty.split("x");
-    rows = parseInt(parts[0]);
-    cols = parseInt(parts[1]);
+    size = parseInt(document.getElementById("difficulty").value);
 
     selectedImage = images[Math.floor(Math.random() * images.length)];
 
     previewImage.src = selectedImage;
 
-    puzzle.style.gridTemplateColumns = `repeat(${cols},1fr)`;
-    puzzle.style.gridTemplateRows = `repeat(${rows},1fr)`;
+    puzzle.style.gridTemplateColumns = `repeat(${size},1fr)`;
+    puzzle.style.gridTemplateRows = `repeat(${size},1fr)`;
 
     createTiles();
     shuffleTiles();
     drawPuzzle();
+
     message.classList.add("hidden");
 }
 
@@ -48,7 +44,7 @@ function createTiles() {
 
     tiles = [];
 
-    for (let i = 0; i < rows * cols - 1; i++) {
+    for (let i = 0; i < size * size - 1; i++) {
         tiles.push(i);
     }
 
@@ -77,18 +73,18 @@ function drawPuzzle() {
 
         if (tile === null) {
             div.classList.add("empty");
-        } 
+        }
         else {
 
-            let r = Math.floor(tile / cols);
-            let c = tile % cols;
+            let row = Math.floor(tile / size);
+            let col = tile % size;
 
             div.style.backgroundImage = `url(${selectedImage})`;
 
-            div.style.backgroundSize = `${cols * 100}% ${rows * 100}%`;
+            div.style.backgroundSize = `${size * 100}% ${size * 100}%`;
 
             div.style.backgroundPosition =
-                `${(c * 100) / (cols - 1)}% ${(r * 100) / (rows - 1)}%`;
+                `${(col / (size - 1)) * 100}% ${(row / (size - 1)) * 100}%`;
         }
 
         div.addEventListener("click", () => moveTile(index));
@@ -101,13 +97,13 @@ function getValidMoves(index) {
 
     let moves = [];
 
-    let r = Math.floor(index / cols);
-    let c = index % cols;
+    let row = Math.floor(index / size);
+    let col = index % size;
 
-    if (r > 0) moves.push(index - cols);
-    if (r < rows - 1) moves.push(index + cols);
-    if (c > 0) moves.push(index - 1);
-    if (c < cols - 1) moves.push(index + 1);
+    if (row > 0) moves.push(index - size);
+    if (row < size - 1) moves.push(index + size);
+    if (col > 0) moves.push(index - 1);
+    if (col < size - 1) moves.push(index + 1);
 
     return moves;
 }
@@ -115,6 +111,7 @@ function getValidMoves(index) {
 function moveTile(index) {
 
     if (getValidMoves(emptyIndex).includes(index)) {
+
         swap(emptyIndex, index);
         emptyIndex = index;
         drawPuzzle();
