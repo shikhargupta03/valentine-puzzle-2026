@@ -1,8 +1,10 @@
 const puzzle = document.getElementById("puzzle");
+const previewImage = document.getElementById("previewImage");
 const message = document.getElementById("message");
 const countdownDiv = document.getElementById("countdown");
 
-let size = 8;
+let rows = 8;
+let cols = 8;
 let tiles = [];
 let emptyIndex;
 
@@ -23,12 +25,18 @@ let selectedImage = "";
 
 function startGame() {
 
-    size = parseInt(document.getElementById("difficulty").value);
+    let difficulty = document.getElementById("difficulty").value;
+
+    let parts = difficulty.split("x");
+    rows = parseInt(parts[0]);
+    cols = parseInt(parts[1]);
 
     selectedImage = images[Math.floor(Math.random() * images.length)];
 
-    puzzle.style.gridTemplateColumns = `repeat(${size},1fr)`;
-    puzzle.style.gridTemplateRows = `repeat(${size},1fr)`;
+    previewImage.src = selectedImage;
+
+    puzzle.style.gridTemplateColumns = `repeat(${cols},1fr)`;
+    puzzle.style.gridTemplateRows = `repeat(${rows},1fr)`;
 
     createTiles();
     shuffleTiles();
@@ -40,7 +48,7 @@ function createTiles() {
 
     tiles = [];
 
-    for (let i = 0; i < size * size - 1; i++) {
+    for (let i = 0; i < rows * cols - 1; i++) {
         tiles.push(i);
     }
 
@@ -72,20 +80,18 @@ function drawPuzzle() {
         } 
         else {
 
-            let row = Math.floor(tile / size);
-            let col = tile % size;
+            let r = Math.floor(tile / cols);
+            let c = tile % cols;
 
             div.style.backgroundImage = `url(${selectedImage})`;
 
-            // ⭐ FIXED IMAGE SLICING
-            div.style.backgroundSize = `${size * 100}% ${size * 100}%`;
+            div.style.backgroundSize = `${cols * 100}% ${rows * 100}%`;
 
             div.style.backgroundPosition =
-                `${(col * 100) / (size - 1)}% ${(row * 100) / (size - 1)}%`;
+                `${(c * 100) / (cols - 1)}% ${(r * 100) / (rows - 1)}%`;
         }
 
         div.addEventListener("click", () => moveTile(index));
-        addSwipe(div, index);
 
         puzzle.appendChild(div);
     });
@@ -94,13 +100,14 @@ function drawPuzzle() {
 function getValidMoves(index) {
 
     let moves = [];
-    let row = Math.floor(index / size);
-    let col = index % size;
 
-    if (row > 0) moves.push(index - size);
-    if (row < size - 1) moves.push(index + size);
-    if (col > 0) moves.push(index - 1);
-    if (col < size - 1) moves.push(index + 1);
+    let r = Math.floor(index / cols);
+    let c = index % cols;
+
+    if (r > 0) moves.push(index - cols);
+    if (r < rows - 1) moves.push(index + cols);
+    if (c > 0) moves.push(index - 1);
+    if (c < cols - 1) moves.push(index + 1);
 
     return moves;
 }
@@ -170,27 +177,6 @@ function createHearts() {
 
         setTimeout(() => heart.remove(), 3000);
     }
-}
-
-function addSwipe(element, index) {
-
-    let startX = 0;
-    let startY = 0;
-
-    element.addEventListener("touchstart", e => {
-        startX = e.touches[0].clientX;
-        startY = e.touches[0].clientY;
-    });
-
-    element.addEventListener("touchend", e => {
-
-        let dx = e.changedTouches[0].clientX - startX;
-        let dy = e.changedTouches[0].clientY - startY;
-
-        if (Math.abs(dx) > 30 || Math.abs(dy) > 30) {
-            moveTile(index);
-        }
-    });
 }
 
 function shareWhatsApp() {

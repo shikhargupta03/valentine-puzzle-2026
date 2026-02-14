@@ -18,15 +18,40 @@
 
 <h1>💖 Solve the Puzzle 💖</h1>
 
+<select id="difficulty"><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine Puzzle ❤️</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>💖 Solve the Puzzle 💖</h1>
+
 <select id="difficulty">
-    <option value="4">Easy (4x4)</option>
-    <option value="6">Medium (6x6)</option>
-    <option value="8" selected>Hard (8x8)</option>
+    <option value="2x2">Very Easy (2x2)</option>
+    <option value="4x5">Easy (4x5)</option>
+    <option value="6x6">Medium (6x6)</option>
+    <option value="8x8" selected>Hard (8x8)</option>
 </select>
 
 <button onclick="startGame()">Start Game</button>
 
-<div id="puzzle"></div>
+<div class="game-container">
+
+    <!-- Puzzle -->
+    <div id="puzzle"></div>
+
+    <!-- Preview Image -->
+    <div class="preview-container">
+        <p>Reference 💕</p>
+        <img id="previewImage" />
+    </div>
+
+</div>
 
 <div id="countdown" class="hidden"></div>
 

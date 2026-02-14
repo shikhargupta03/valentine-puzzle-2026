@@ -4,25 +4,29 @@ body {
     background: linear-gradient(to right, #ff758c, #ff7eb3);
 }
 
-#puzzle {
-    margin: 20px auto;
-    display: grid;
-    width: 320px;
-    height: 320px;
-    border: 3px solid white;
-    touch-action: manipulation;body {
-    text-align: center;
-    font-family: Arial;
-    background: linear-gradient(to right, #ff758c, #ff7eb3);
+.game-container {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    gap: 20px;
+    flex-wrap: wrap;
 }
 
 #puzzle {
-    margin: 20px auto;
     display: grid;
-    width: min(90vw, 420px);
-    height: min(90vw, 420px);
+    width: min(80vw, 420px);
+    height: min(80vw, 420px);
     border: 3px solid white;
-    touch-action: manipulation;
+}
+
+.preview-container {
+    color: white;
+}
+
+.preview-container img {
+    width: 150px;
+    border: 3px solid white;
+    border-radius: 10px;
 }
 
 .tile {
