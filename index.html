@@ -1,23 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Valentine Puzzle ❤️</title>
-<link rel="stylesheet" href="style.css"/>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<h1>❤️ Solve Our Puzzle ❤️</h1>
+<h1>💖 Solve Our Puzzle 💖</h1>
 
-<div class="game-container">
+<div class="container">
 
     <div id="puzzle"></div>
 
-    <div class="side-panel">
+    <div class="side">
         <h3>Reference</h3>
-        <img src="images/photo.jpg" id="reference"/>
+        <img id="reference">
 
         <button onclick="solvePuzzle()">Resolve Puzzle</button>
     </div>
@@ -25,9 +25,11 @@
 </div>
 
 <div id="message" class="hidden">
-    <h2>💖 Happy Valentine’s Day 💖</h2>
-    <p>You complete my puzzle ❤️</p>
-    <p>Forever & Always 🫶</p>
+    <h2 id="loveText"></h2>
+
+    <button id="shareBtn" onclick="shareWhatsApp()">
+        Share On WhatsApp 💚
+    </button>
 </div>
 
 <script src="script.js"></script>

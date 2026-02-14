@@ -1,30 +1,42 @@
 const size = 3;
 const puzzle = document.getElementById("puzzle");
 const reference = document.getElementById("reference");
+const loveText = document.getElementById("loveText");
 
 let tiles = [];
 let emptyIndex = size * size - 1;
 
-/* AUTO GENERATE IMAGE LIST img1 → img10 */
+/* IMAGE LIST */
 const photos = [];
-
 for (let i = 1; i <= 10; i++) {
     photos.push(`images/img${i}.jpg`);
 }
 
-/* RANDOM PHOTO SELECTION */
+/* CUTE LOVE MESSAGES */
+const messages = [
+    "You are my favorite notification ❤️",
+    "Every puzzle piece leads me back to you 💕",
+    "Life is beautiful because you are in it 💖",
+    "You complete me in every possible way 🧩",
+    "With you, every moment feels magical ✨",
+    "My heart chooses you everyday ❤️",
+    "You are my today and all of my tomorrows 💞",
+    "Our love story is my favorite adventure 💘",
+    "You are my happy place 🥰",
+    "Forever is not enough with you ❤️"
+];
+
+/* RANDOM IMAGE */
 const selectedPhoto =
     photos[Math.floor(Math.random() * photos.length)];
 
 reference.src = selectedPhoto;
 
-/* WAIT FOR IMAGE LOAD */
+/* LOAD IMAGE FIRST */
 const image = new Image();
 image.src = selectedPhoto;
 
-image.onload = () => {
-    createPuzzle();
-};
+image.onload = () => createPuzzle();
 
 function createPuzzle() {
     tiles = [...Array(size * size).keys()];
@@ -81,7 +93,7 @@ function moveTile(index) {
         isAdjacent(index, emptyIndex)) {
 
         [tiles[index], tiles[emptyIndex]] =
-            [tiles[emptyIndex], tiles[index]];
+        [tiles[emptyIndex], tiles[index]];
 
         emptyIndex = index;
 
@@ -107,8 +119,7 @@ function checkWin() {
         if (tiles[i] !== i) return;
     }
 
-    document.getElementById("message")
-        .classList.remove("hidden");
+    showLoveMessage();
 }
 
 function solvePuzzle() {
@@ -117,7 +128,29 @@ function solvePuzzle() {
     emptyIndex = size * size - 1;
 
     render();
+    showLoveMessage();
+}
+
+function showLoveMessage() {
+
+    const randomMessage =
+        messages[Math.floor(Math.random() * messages.length)];
+
+    loveText.innerText = randomMessage;
 
     document.getElementById("message")
         .classList.remove("hidden");
+}
+
+/* WHATSAPP SHARE */
+function shareWhatsApp() {
+
+    const text = encodeURIComponent(
+        "I solved our love puzzle ❤️🧩"
+    );
+
+    window.open(
+        `https://wa.me/?text=${text}`,
+        "_blank"
+    );
 }
