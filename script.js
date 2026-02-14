@@ -2,60 +2,31 @@ const board = document.getElementById("puzzle-board");
 const preview = document.getElementById("preview-img");
 const message = document.getElementById("message");
 
-const GRID = 3;
-const TOTAL = GRID * GRID;
+const SIZE = 3;
+const TOTAL = SIZE * SIZE;
 
-let tiles = [];
 let order = [];
 let blankIndex;
+let imagePath;
 
 /* Load Random Image */
-function loadRandomImage() {
+function loadImage() {
 
   const num = Math.floor(Math.random() * 10) + 1;
-  const path = `images/img${num}.jpg`;
+  imagePath = `images/img${num}.jpg`;
 
-  preview.src = path;
+  preview.src = imagePath;
 
-  const img = new Image();
-  img.src = path;
-
-  img.onload = () => createPuzzle(img);
+  setupPuzzle();
 }
 
-/* Create Puzzle */
-function createPuzzle(img) {
+/* Setup Puzzle */
+function setupPuzzle() {
 
   board.innerHTML = "";
-  tiles = [];
   order = [];
 
-  const pieceW = img.width / GRID;
-  const pieceH = img.height / GRID;
-
   for (let i = 0; i < TOTAL; i++) {
-
-    if (i === TOTAL - 1) {
-      tiles.push(null);
-      order.push(i);
-      continue;
-    }
-
-    const canvas = document.createElement("canvas");
-    canvas.width = 100;
-    canvas.height = 100;
-
-    const ctx = canvas.getContext("2d");
-
-    const sx = (i % GRID) * pieceW;
-    const sy = Math.floor(i / GRID) * pieceH;
-
-    ctx.drawImage(img, sx, sy, pieceW, pieceH, 0, 0, 100, 100);
-
-    canvas.classList.add("tile");
-    canvas.onclick = () => moveTile(i);
-
-    tiles.push(canvas);
     order.push(i);
   }
 
@@ -73,28 +44,44 @@ function shuffle() {
   blankIndex = order.indexOf(TOTAL - 1);
 }
 
-/* Render */
+/* Render Tiles */
 function render() {
 
   board.innerHTML = "";
 
-  order.forEach(val => {
+  order.forEach((val, index) => {
 
     if (val === TOTAL - 1) {
+
       const blank = document.createElement("div");
-      blank.classList.add("tile", "blank");
+      blank.className = "tile blank";
       board.appendChild(blank);
+
     } else {
-      board.appendChild(tiles[val]);
+
+      const tile = document.createElement("div");
+      tile.className = "tile";
+
+      const row = Math.floor(val / SIZE);
+      const col = val % SIZE;
+
+      tile.style.backgroundImage = `url(${imagePath})`;
+      tile.style.backgroundSize = `${SIZE * 100}px`;
+      tile.style.backgroundPosition =
+        `-${col * 100}px -${row * 100}px`;
+
+      tile.onclick = () => moveTile(val);
+
+      board.appendChild(tile);
     }
 
   });
 }
 
-/* Move */
-function moveTile(originalIndex) {
+/* Move Tile */
+function moveTile(value) {
 
-  const tileIndex = order.indexOf(originalIndex);
+  const tileIndex = order.indexOf(value);
 
   if (isAdjacent(tileIndex, blankIndex)) {
 
@@ -105,20 +92,18 @@ function moveTile(originalIndex) {
 
     render();
 
-    if (isSolved()) {
-      showLove();
-    }
+    if (isSolved()) showLove();
   }
 }
 
-/* Adjacent */
+/* Adjacent Check */
 function isAdjacent(i, j) {
 
-  const r1 = Math.floor(i / GRID);
-  const c1 = i % GRID;
+  const r1 = Math.floor(i / SIZE);
+  const c1 = i % SIZE;
 
-  const r2 = Math.floor(j / GRID);
-  const c2 = j % GRID;
+  const r2 = Math.floor(j / SIZE);
+  const c2 = j % SIZE;
 
   return (
     (r1 === r2 && Math.abs(c1 - c2) === 1) ||
@@ -126,22 +111,24 @@ function isAdjacent(i, j) {
   );
 }
 
-/* Solved */
+/* Solved Check */
 function isSolved() {
   return order.every((v, i) => v === i);
 }
 
-/* Message + Effects */
+/* Love Effects */
 function showLove() {
 
   const msgs = [
-    "Every piece leads to you 💖",
-    "Forever yours ❤️",
-    "My heart belongs to you 💘",
-	"Happy Valentine's Day ❤️ You complete me.",
-    "You are my forever favorite ❤️",
-    "My heart feels complete with you 💖",
-    "You are the best part of my life 💘"
+    "Happy Valentine's Day ❤️",
+    "You complete my life 💕",
+    "Forever with you ❤️",
+    "You are my heart 💖",
+	"Happy Valentine's Day ❤️ You complete my puzzle of life.",
+    "Every piece led me to you 💕",
+    "You make my world whole 🧩❤️",
+    "Solving this puzzle was easy… loving you is easier 💖",
+    "You are my forever favorite picture 📸❤️"
   ];
 
   message.innerText =
@@ -183,4 +170,4 @@ function shareWhatsApp() {
   window.open("https://wa.me/?text=I solved this love puzzle ❤️");
 }
 
-loadRandomImage();
+loadImage();
