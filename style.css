@@ -24,8 +24,8 @@ body {
 
 .preview-container img {
     width: 150px;
-    border: 3px solid white;
     border-radius: 10px;
+    border: 3px solid white;
 }
 
 .tile {
@@ -42,14 +42,10 @@ body {
     display: none;
 }
 
-#countdown {
-    font-size: 40px;
-    color: white;
-    animation: pulse 1s infinite;
-}
-
-@keyframes pulse {
-    50% { transform: scale(1.2); }
+#finalSurprise img {
+    width: 250px;
+    border-radius: 15px;
+    margin-top: 20px;
 }
 
 @keyframes fall {

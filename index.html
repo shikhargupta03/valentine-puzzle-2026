@@ -13,11 +13,20 @@
 
 <select id="difficulty">
     <option value="2">Very Easy (2x2)</option>
-    <option value="4">Easy (4x4)</option>
-    <option value="6" selected>Medium (6x6)</option>
-</select>
+    <option value="4">Easy (4x4)</option><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine Puzzle ❤️</title>
+<link rel="stylesheet" href="style.css">
+</head>
 
-<button onclick="startGame()">Start Game</button>
+<body>
+
+<h1>💖 Solve the Puzzle 💖</h1>
+
+<button onclick="startGame()">Start Puzzle</button>
 
 <div class="game-container">
 
@@ -30,11 +39,14 @@
 
 </div>
 
-<div id="countdown" class="hidden"></div>
+<div id="resolveSection" class="hidden">
+    <button onclick="showFinalSurprise()">Resolve Surprise ❤️</button>
+</div>
 
-<div id="message" class="hidden">
-    <h2>❤️ Happy Valentine Day ❤️</h2>
-    <button onclick="shareWhatsApp()">Share Love 💌</button>
+<div id="finalSurprise" class="hidden">
+    <img id="finalImage"/>
+    <h2>❤️ Happy Valentine's Day ❤️</h2>
+    <p>You are my favorite person in the whole world 💕</p>
 </div>
 
 <script src="script.js"></script>

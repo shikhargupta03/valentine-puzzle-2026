@@ -1,9 +1,11 @@
 const puzzle = document.getElementById("puzzle");
 const previewImage = document.getElementById("previewImage");
-const message = document.getElementById("message");
-const countdownDiv = document.getElementById("countdown");
+const resolveSection = document.getElementById("resolveSection");
+const finalSurprise = document.getElementById("finalSurprise");
+const finalImage = document.getElementById("finalImage");
 
-let size = 4;
+const size = 3;
+
 let tiles = [];
 let emptyIndex;
 
@@ -11,20 +13,12 @@ const images = [
     "images/img1.jpg",
     "images/img2.jpg",
     "images/img3.jpg",
-    "images/img4.jpg",
-    "images/img5.jpg",
-    "images/img6.jpg",
-    "images/img7.jpg",
-    "images/img8.jpg",
-    "images/img9.jpg",
-    "images/img10.jpg"
+    "images/img4.jpg"
 ];
 
 let selectedImage = "";
 
 function startGame() {
-
-    size = parseInt(document.getElementById("difficulty").value);
 
     selectedImage = images[Math.floor(Math.random() * images.length)];
 
@@ -37,7 +31,8 @@ function startGame() {
     shuffleTiles();
     drawPuzzle();
 
-    message.classList.add("hidden");
+    resolveSection.classList.add("hidden");
+    finalSurprise.classList.add("hidden");
 }
 
 function createTiles() {
@@ -54,7 +49,7 @@ function createTiles() {
 
 function shuffleTiles() {
 
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < 200; i++) {
         let moves = getValidMoves(emptyIndex);
         let move = moves[Math.floor(Math.random() * moves.length)];
         swap(emptyIndex, move);
@@ -80,9 +75,7 @@ function drawPuzzle() {
             let col = tile % size;
 
             div.style.backgroundImage = `url(${selectedImage})`;
-
             div.style.backgroundSize = `${size * 100}% ${size * 100}%`;
-
             div.style.backgroundPosition =
                 `${(col / (size - 1)) * 100}% ${(row / (size - 1)) * 100}%`;
         }
@@ -129,32 +122,14 @@ function checkWin() {
         if (tiles[i] !== i) return;
     }
 
-    startCountdown();
-}
-
-function startCountdown() {
-
-    let count = 3;
-    countdownDiv.classList.remove("hidden");
-
-    let interval = setInterval(() => {
-
-        countdownDiv.innerText = count;
-
-        if (count === 0) {
-            clearInterval(interval);
-            countdownDiv.classList.add("hidden");
-            showMessage();
-        }
-
-        count--;
-
-    }, 1000);
-}
-
-function showMessage() {
-    message.classList.remove("hidden");
+    resolveSection.classList.remove("hidden");
     createHearts();
+}
+
+function showFinalSurprise() {
+
+    finalImage.src = selectedImage;
+    finalSurprise.classList.remove("hidden");
 }
 
 function createHearts() {
@@ -174,12 +149,4 @@ function createHearts() {
 
         setTimeout(() => heart.remove(), 3000);
     }
-}
-
-function shareWhatsApp() {
-
-    let text = "I solved this Valentine Puzzle ❤️";
-    let url = window.location.href;
-
-    window.open(`https://wa.me/?text=${encodeURIComponent(text + " " + url)}`);
 }
